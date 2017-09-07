@@ -1,0 +1,26 @@
+{
+  "name": "rent-a-car-system-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pcfmello/rent-a-car-system-backend.git"
+  },
+  "author": "Paulo Cesar Ferreira de Mello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pcfmello/rent-a-car-system-backend/issues"
+  },
+  "homepage": "https://github.com/pcfmello/rent-a-car-system-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.10",
+    "validator": "^8.1.0"
+  }
+}
