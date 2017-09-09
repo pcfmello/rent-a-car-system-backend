@@ -21,68 +21,46 @@ db.once('open', function() {
     dataFim: Date,
     responsavel: String,
     cafe: Boolean,
-    descricao: String
+    quantidadePessoas: Number,
+    descricao: String,
+    criadoEm: Date
   }));
 
 });
 
 app.use(cors());
+
+// BODY PARSER CONVERTE OS DADOS EM JSON PARA RETORNO
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-
 app.get('/reservas', function(req, res) {
-    res.json([
-      {
-        local : 'Centro',
-        carro : 'Golf',
-        dataInicio : '12/02/2012',
-        dataFim : '15/12/2012',
-        responsavel : 'Lucas',
-        descricao : 'Alugado para passeio'
-
-      },
-
-      {
-        local : 'Sul',
-        carro : 'Logan',
-        dataInicio : '25/05/2015',
-        dataFim : '15/12/2018',
-        responsavel : 'Paulo',
-        descricao : 'Alugado para trabalho'
-
-      },
-
-      {
-        local : 'Norte',
-        carro : 'Pali Weekend',
-        dataInicio : '09/11/2013',
-        dataFim : '15/12/2015',
-        responsavel : 'Naiara',
-        descricao : 'Alugado para férias'
-      }
-    ])
+  Reserva.find({}, function(error, reservas) {
+    if(error) {
+      res.json({ error: 'Não foi possivel retornar suas reservas' });
+    } else {
+      res.json(reservas);
+    }
+  });
 });
 
 app.get('/filiais', function(req, res) {
     res.json([
       {
-        local: 'Florianópolis',
-        filial: 'Capoeiras'
+        local: 'Florianópolis-SC',
+        filial: 'Aeroporto Hercílio Luz'
       },
       {
-        local: 'Florianópolis',
-        filial: 'Centro'
-      },
-      {
-        local: 'Londrina',
-        filial: 'Centro'
+        local: 'Curitiba-PR',
+        filial: 'Rodoferroviária de Curitiba'
       },
       {
         local: 'Londrina',
-        filial: 'Gleba Palhano'
+        filial: 'Catuaí Shopping Center'
+      },
+      {
+        local: 'Balneário Camboriú',
+        filial: 'Avenida Atlântica'
       }
     ]);
 });
@@ -96,7 +74,6 @@ app.get('/carros', function(req, res) {
 });
 
 app.post('/reservas', function(req, res) {
-  console.log(req.body);
   new Reserva({
     local: req.body.local,
     carro: req.body.carro,
@@ -104,7 +81,9 @@ app.post('/reservas', function(req, res) {
     dataFim: req.body.dataFim,
     responsavel: req.body.responsavel,
     cafe: req.body.cafe,
-    descricao: req.body.descricao
+    quantidadePessoas: req.body.quantidadePessoas,
+    descricao: req.body.descricao,
+    criadoEm: new Date()
   }).save(function(error, reserva) {
     if(error) {
       res.json({ error: 'Não foi possivel salvar a reserva.'})
