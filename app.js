@@ -1,10 +1,37 @@
 var express = require('express');
 var cors = require('cors');
+var bodyParser = require('body-parser');
 var app = express();
 
-app.use(cors());
+// IMPORTA O MONGOOSE E O CONECTA COM O BD MONGODB
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/rent_a_car');
+var db = mongoose.connection;
+// TRATAMENTO DE ERRO DE CONEXÃO
+db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados.'));
 
-app.listen(5000);
+// SCHEMAS DO MONGODB
+db.once('open', function() {
+
+  // SCHEMA DE RESERVAS
+  Reserva = mongoose.model('Reserva', mongoose.Schema({
+    local: Object,
+    carro: String,
+    dataInicio: Date,
+    dataFim: Date,
+    responsavel: String,
+    cafe: Boolean,
+    descricao: String
+  }));
+
+});
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
 
 app.get('/reservas', function(req, res) {
     res.json([
@@ -67,3 +94,24 @@ app.get('/carros', function(req, res) {
       'Fiat Punto'
     ]);
 });
+
+app.post('/reservas', function(req, res) {
+  console.log(req.body);
+  new Reserva({
+    local: req.body.local,
+    carro: req.body.carro,
+    dataInicio: req.body.dataInicio,
+    dataFim: req.body.dataFim,
+    responsavel: req.body.responsavel,
+    cafe: req.body.cafe,
+    descricao: req.body.descricao
+  }).save(function(error, reserva) {
+    if(error) {
+      res.json({ error: 'Não foi possivel salvar a reserva.'})
+    } else {
+      res.json(reserva)
+    }
+  });
+});
+
+app.listen(5000);
