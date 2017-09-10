@@ -1,7 +1,9 @@
 var db = require('../config/db-config.js');
 
 exports.buscaTodos = function(callback) {
-  db.Reserva.find({}, function(error, reservas) {
+  db.Reserva.find({})
+  .populate('local')
+  .exec(function(error, reservas) {
     if(error) {
       callback({ error: 'Não foi possivel retornar suas reservas' });
     } else {
@@ -11,7 +13,9 @@ exports.buscaTodos = function(callback) {
 };
 
 exports.buscaPorId = function(id, callback) {
-  db.Reserva.findById(id, function(error, reserva) {
+  db.Reserva.findById(id)
+  .populate('local')
+  .exec(function(error, reserva) {
     if(error) {
       callback({ error: 'Não foi possivel retornar a reserva' });
     } else {

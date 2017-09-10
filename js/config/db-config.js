@@ -10,10 +10,15 @@ db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados.'
 
 // SCHEMAS DO MONGODB
 db.once('open', function() {
+
   // SCHEMA DE RESERVAS
   exports.Reserva = mongoose.model('Reserva', mongoose.Schema({
-    local: Object,
-    carro: String,
+    // Referencia o ID do local no schema Local
+    local: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Local'
+    },
+    carro: Object,
     dataInicio: Date,
     dataFim: Date,
     responsavel: String,
@@ -21,5 +26,11 @@ db.once('open', function() {
     quantidadePessoas: Number,
     descricao: String,
     criadoEm: Date
-  }));
+  }), 'Reservas');
+
+  exports.Local = mongoose.model('Local', mongoose.Schema({
+    nome: String,
+    carros: Array,
+    criadoEm: Date
+  }), 'Locais');
 });

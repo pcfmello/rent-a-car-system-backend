@@ -1,5 +1,6 @@
 var app = require('./js/config/app-config.js');
 var reservaController = require('./js/controllers/reservaController.js');
+var localController = require('./js/controllers/localController.js');
 
 // ROTA PARA OBTER A LISTA DE RESERVAS
 app.get('/reservas', function(req, res) {
@@ -38,19 +39,8 @@ app.delete('/reservas/:id', function(req, res) {
   });
 });
 
-app.get('/filiais', function(req, res) {
-    res.json([
-      'Florianópolis-SC / Aeroporto Hercílio Luz',
-      'Curitiba-PR / Rodoferroviária de Curitiba',
-      'Londrina-PR / Catuaí Shopping Center',
-      'Balneário Camboriú-SC / Avenida Atlântica'      
-    ]);
-});
-
-app.get('/carros', function(req, res) {
-    res.json([
-      'Renault Logan',
-      'Volkswagem Jetta',
-      'Fiat Punto'
-    ]);
+app.get('/locais', function(req, res) {
+  localController.buscaTodos(function(localResponse) {
+    res.json(localResponse);
+  });
 });
