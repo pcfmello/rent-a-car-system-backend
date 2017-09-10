@@ -40,22 +40,10 @@ app.delete('/reservas/:id', function(req, res) {
 
 app.get('/filiais', function(req, res) {
     res.json([
-      {
-        local: 'Florianópolis-SC',
-        filial: 'Aeroporto Hercílio Luz'
-      },
-      {
-        local: 'Curitiba-PR',
-        filial: 'Rodoferroviária de Curitiba'
-      },
-      {
-        local: 'Londrina',
-        filial: 'Catuaí Shopping Center'
-      },
-      {
-        local: 'Balneário Camboriú',
-        filial: 'Avenida Atlântica'
-      }
+      'Florianópolis-SC / Aeroporto Hercílio Luz',
+      'Curitiba-PR / Rodoferroviária de Curitiba',
+      'Londrina-PR / Catuaí Shopping Center',
+      'Balneário Camboriú-SC / Avenida Atlântica'      
     ]);
 });
 

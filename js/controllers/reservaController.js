@@ -41,7 +41,7 @@ exports.salva = function(reserva, callback) {
 };
 
 exports.atualiza = function(reservaObj, callback) {
-  db.Reserva.findById(reservaObj.id, function(error, reserva) {
+  db.Reserva.findById(reservaObj._id, function(error, reserva) {
       reserva.local = reservaObj.local;
       reserva.carro = reservaObj.carro;
       reserva.dataInicio = reservaObj.dataInicio;
