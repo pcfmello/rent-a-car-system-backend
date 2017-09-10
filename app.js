@@ -1,46 +1,40 @@
-var express = require('express');
-var cors = require('cors');
-var bodyParser = require('body-parser');
-var app = express();
+var app = require('./js/config/app-config.js');
+var reservaController = require('./js/controllers/reservaController.js');
 
-// IMPORTA O MONGOOSE E O CONECTA COM O BD MONGODB
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/rent_a_car');
-var db = mongoose.connection;
-// TRATAMENTO DE ERRO DE CONEXÃO
-db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados.'));
-
-// SCHEMAS DO MONGODB
-db.once('open', function() {
-
-  // SCHEMA DE RESERVAS
-  Reserva = mongoose.model('Reserva', mongoose.Schema({
-    local: Object,
-    carro: String,
-    dataInicio: Date,
-    dataFim: Date,
-    responsavel: String,
-    cafe: Boolean,
-    quantidadePessoas: Number,
-    descricao: String,
-    criadoEm: Date
-  }));
-
+// ROTA PARA OBTER A LISTA DE RESERVAS
+app.get('/reservas', function(req, res) {
+  reservaController.buscaTodos(function(reservaResponse) {
+    res.json(reservaResponse);
+  });
 });
 
-app.use(cors());
+// ROTA PARA OBTER UMA RESERVA ATRAVÉS DO ID
+app.get('/reservas/:id', function(req, res) {
+  var id = req.param('id');
+  reservaController.buscaPorId(id, function(reservaResponse) {
+    res.json(reservaResponse);
+  });
+});
 
-// BODY PARSER CONVERTE OS DADOS EM JSON PARA RETORNO
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.post('/reservas', function(req, res) {
+  var reserva = req.body;
+  reservaController.salva(reserva, function(reservaResponse) {
+    res.json(reservaResponse);
+  });
+});
 
-app.get('/reservas', function(req, res) {
-  Reserva.find({}, function(error, reservas) {
-    if(error) {
-      res.json({ error: 'Não foi possivel retornar suas reservas' });
-    } else {
-      res.json(reservas);
-    }
+app.put('/reservas', function(req, res) {
+  var reserva = req.body;
+  reservaController.atualiza(reserva, function(reservaResponse) {
+    res.json(reservaResponse);
+  });
+});
+
+// ROTA PARA DELETAR UMA RESERVA ATRAVÉS DO ID
+app.delete('/reservas/:id', function(req, res) {
+  var id = req.param('id');
+  reservaController.deleta(id, function(reservaResponse) {
+    res.json(reservaResponse);
   });
 });
 
@@ -72,25 +66,3 @@ app.get('/carros', function(req, res) {
       'Fiat Punto'
     ]);
 });
-
-app.post('/reservas', function(req, res) {
-  new Reserva({
-    local: req.body.local,
-    carro: req.body.carro,
-    dataInicio: req.body.dataInicio,
-    dataFim: req.body.dataFim,
-    responsavel: req.body.responsavel,
-    cafe: req.body.cafe,
-    quantidadePessoas: req.body.quantidadePessoas,
-    descricao: req.body.descricao,
-    criadoEm: new Date()
-  }).save(function(error, reserva) {
-    if(error) {
-      res.json({ error: 'Não foi possivel salvar a reserva.'})
-    } else {
-      res.json(reserva)
-    }
-  });
-});
-
-app.listen(5000);
