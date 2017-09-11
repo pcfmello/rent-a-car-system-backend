@@ -11,8 +11,16 @@ app.get('/reservas', function(req, res) {
 
 // ROTA PARA OBTER UMA RESERVA ATRAVÉS DO ID
 app.get('/reservas/:id', function(req, res) {
-  var id = req.param('id');
+  var id = req.params.id;
   reservaController.buscaPorId(id, function(reservaResponse) {
+    res.json(reservaResponse);
+  });
+});
+
+// ROTA PARA CONSULTAR DISPONIBILIDADE DE RESERVA
+app.post('/reservas/consulta', function(req, res) {
+  var consulta = req.body;
+  reservaController.consulta(consulta, function(reservaResponse) {
     res.json(reservaResponse);
   });
 });
