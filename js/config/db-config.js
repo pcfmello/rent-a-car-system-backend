@@ -19,8 +19,9 @@ db.once('open', function() {
       ref: 'Local'
     },
     carro: Object,
-    dataInicio: Date,
-    dataFim: Date,
+    data: String,
+    horaInicio: Date,
+    horaFim: Date,
     responsavel: String,
     cafe: Boolean,
     quantidadePessoas: Number,

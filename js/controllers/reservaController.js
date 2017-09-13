@@ -21,7 +21,8 @@ exports.consulta = function(consulta, callback) {
     if(error) {
       callback({ error: 'Não foi possivel retornar sua consulta' });
     } else {
-      callback(reserva);
+      console.log('tem reserva');
+      callback(false);
     }
   });
 }
@@ -54,8 +55,9 @@ exports.salva = function(reserva, callback) {
   new db.Reserva({
     local: reserva.local,
     carro: reserva.carro,
-    dataInicio: reserva.dataInicio,
-    dataFim: reserva.dataFim,
+    data: reserva.data,
+    horaInicio: reserva.horaInicio,
+    horaFim: reserva.horaFim,
     responsavel: reserva.responsavel,
     cafe: reserva.cafe,
     quantidadePessoas: reserva.quantidadePessoas,
@@ -74,8 +76,9 @@ exports.atualiza = function(reservaObj, callback) {
   db.Reserva.findById(reservaObj._id, function(error, reserva) {
       reserva.local = reservaObj.local;
       reserva.carro = reservaObj.carro;
-      reserva.dataInicio = reservaObj.dataInicio;
-      reserva.dataFim = reservaObj.dataFim;
+      reserva.data =  reservaObj.data,
+      reserva.horaInicio = reservaObj.horaInicio;
+      reserva.horaFim = reservaObj.horaFim;
       reserva.responsavel = reservaObj.responsavel;
       reserva.cafe = reservaObj.cafe;
       reserva.quantidadePessoas = reservaObj.quantidadePessoas;
